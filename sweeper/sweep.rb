@@ -4,17 +4,26 @@ STDOUT.sync = true
 require 'k8s-ruby'
 require 'config'
 
-ANNOTATION_KEY = :'io.getkuby/previews.expirationTimestamp'
+ANNOTATION_KEY = :'getkuby.io/previews.expirationTimestamp'
 TIMESTAMP_FORMAT = '%Y%m%d%H%M%S'.freeze
 TIMESTAMP_TZ_FORMAT = '%Y%m%d%H%M%S%z'.freeze
 
+def human_readable_timespan(seconds)
+  result = seconds
+  return "#{result.round}s" if result < 60
+
+  result /= 60
+  return "#{result.round}m" if result < 60
+
+  result /= 60
+  return "#{result.round}h" if result < 24
+
+  result /= 24
+  "#{result.round}d"
+end
+
 config = Config.load
 client = K8s::Client.in_cluster_config
-# client = K8s::Client.config(
-#   K8s::Config.load_file(
-#     File.expand_path '~/.kube/config'
-#   )
-# )
 
 namespaces = client.api('v1').resource('namespaces').list
 namespaces.each do |ns|
@@ -38,7 +47,9 @@ namespaces.each do |ns|
     next
   end
 
-  if exp_time <= Time.now.utc
+  now = Time.now.utc
+
+  if exp_time <= now
     puts "Deleting expired namespace/#{ns.metadata.name}"
 
     begin
@@ -47,5 +58,8 @@ namespaces.each do |ns|
     rescue => e
       puts "Could not delete expired namespace/#{ns.metadata.name}: #{e.message}"
     end
+  else
+    remaining = exp_time - now
+    puts "namespace/#{ns.metadata.name} has not yet expired, #{human_readable_timespan(remaining)} remaining"
   end
 end

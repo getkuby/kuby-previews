@@ -9,6 +9,7 @@ module Kuby
     autoload :PreviewConfig,         'kuby/previews/preview_config'
     autoload :PreviewEnvironment,    'kuby/previews/preview_environment'
     autoload :PreviewKubernetesSpec, 'kuby/previews/preview_kubernetes_spec'
+    autoload :Sweeper,               'kuby/previews/sweeper'
     autoload :TimeHelpers,           'kuby/previews/time_helpers'
     autoload :Timespan,              'kuby/previews/timespan'
   end

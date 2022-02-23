@@ -1,1 +1,7 @@
-config.yml  # test file
+Dockerfile
+
+config/**/*  # only for testing, config is mounted as a volume in prod
+config
+
+scripts/**/*
+scripts

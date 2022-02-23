@@ -12,7 +12,10 @@ module Kuby
       end
 
       def kubernetes(&block)
-        @kubernetes ||= PreviewKubernetesSpec.new(self)
+        @kubernetes ||= PreviewKubernetesSpec.new(self).tap do |spec|
+          spec.add_plugin(:previews)
+        end
+
         @kubernetes.instance_eval(&block) if block
         @kubernetes
       end

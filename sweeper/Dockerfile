@@ -1,8 +1,8 @@
-FROM ruby:3.0
+FROM ruby:3.0-alpine
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y ca-certificates
+RUN apk update && apk add ca-certificates build-base
 
 COPY Gemfile ./
 COPY Gemfile.lock ./

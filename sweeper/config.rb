@@ -1,7 +1,7 @@
 require 'yaml'
 
 class Config
-  def self.load(path = 'config.yml')
+  def self.load(path = 'config/config.yml')
     Config.new(YAML.load_file(path))
   end
 
