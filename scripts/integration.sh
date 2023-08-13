@@ -12,6 +12,7 @@ cd kuby_test
 printf "\ngem 'kuby-previews', path: 'vendor/kuby-previews'\n" >> Gemfile
 printf "gem 'kuby-prebundler', '~> 0.1'\n" >> Gemfile
 printf "gem 'kuby-kind', '~> 0.2'\n" >> Gemfile
+printf "gem 'activerecord-cockroachdb-adapter', '~> 6.0'\n" >> Gemfile
 
 # install ruby deps
 bundle lock
