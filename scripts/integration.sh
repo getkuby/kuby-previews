@@ -114,34 +114,34 @@ touch app/views/home/index.html.erb
 # start docker registry (helps make sure pushes work)
 docker run -d -p 5000:5000 --name registry registry:2
 
-# # build and push
-# GLI_DEBUG=true bundle exec kuby -e staging build \
-#   -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
-#   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
-# GLI_DEBUG=true bundle exec kuby -e staging push
+# build and push
+GLI_DEBUG=true bin/kuby -e staging build \
+  -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
+  -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
+GLI_DEBUG=true bundle exec kuby -e staging push
 
-# # setup cluster
-# GLI_DEBUG=true bundle exec kuby -e staging setup
-# GLI_DEBUG=true bundle exec kuby -e staging setup
+# setup cluster
+GLI_DEBUG=true bundle exec kuby -e staging setup
+GLI_DEBUG=true bundle exec kuby -e staging setup
 
-# # find kubectl executable
-# kubectl=$(bundle show kubectl-rb)/vendor/kubectl
+# find kubectl executable
+kubectl=$(bundle show kubectl-rb)/vendor/kubectl
 
-# # export kubeconfig
-# kind get kubeconfig --name kubytest > .kubeconfig
-# export KUBECONFIG=.kubeconfig
+# export kubeconfig
+kind get kubeconfig --name kubytest > .kubeconfig
+export KUBECONFIG=.kubeconfig
 
-# # find ingress IP
-# ingress_ip=$($kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
+# find ingress IP
+ingress_ip=$($kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
 
-# # deploy!
-# KUBY_PREVIEW_NAME=foo GLI_DEBUG=true bundle exec kuby -e staging deploy
+# deploy!
+KUBY_PREVIEW_NAME=foo GLI_DEBUG=true bundle exec kuby -e staging deploy
 
-# # attempt to hit the app
-# curl -vvv http://$ingress_ip \
-#   -H 'Host: staging.kubytest.io' \
-#   --fail \
-#   --connect-timeout 5 \
-#   --max-time 10 \
-#   --retry 5 \
-#   --retry-max-time 40
+# attempt to hit the app
+curl -vvv http://$ingress_ip \
+  -H 'Host: staging.kubytest.io' \
+  --fail \
+  --connect-timeout 5 \
+  --max-time 10 \
+  --retry 5 \
+  --retry-max-time 40
