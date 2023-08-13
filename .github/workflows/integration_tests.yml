@@ -1,0 +1,44 @@
+name: Integration Tests
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        # NOTE: these need to be valid kindest/node image versions
+        # k8s_version: ['1.21.2', '1.22.7', '1.23.5']
+        k8s_version: ['1.23.5']
+    steps:
+      - name: Disable Swap
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+      - uses: actions/checkout@v2
+        with:
+          path: kuby-previews/
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Bundler
+        run: gem install bundler
+      - name: Install Kind
+        run: kuby-previews/scripts/install-kind.sh
+      - name: Run Tests
+        run: kuby-previews/scripts/integration.sh
+        env:
+          K8S_VERSION: ${{ matrix.k8s_version }}
+          PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
+          PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
