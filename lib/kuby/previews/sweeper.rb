@@ -95,7 +95,7 @@ module Kuby
           subject do
             kind 'ServiceAccount'
             name context.service_account.metadata.name
-            namespace context.namespace
+            namespace context.service_account.metadata.namespace
           end
 
           role_ref do
@@ -115,10 +115,6 @@ module Kuby
             namespace NAMESPACE
           end
         end
-      end
-
-      def namespace
-        environment.kubernetes.namespace.metadata.name
       end
     end
   end

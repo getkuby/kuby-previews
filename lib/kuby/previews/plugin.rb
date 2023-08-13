@@ -44,7 +44,7 @@ module Kuby
             # empty string means core API group
             api_groups [""]
             resources %w(namespaces)
-            verbs %w(list delete)
+            verbs %w(get list delete)
           end
         end
       end
