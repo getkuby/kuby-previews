@@ -36,6 +36,10 @@ jobs:
           working-directory: kuby_test/
           bundler-cache: true
 
+      - name: Add bundler platform
+        working-directory: kuby_test/
+        run: bundle lock --add-platform $(ruby -rbundler -e 'puts Bundler.local_platform.to_s')
+
       - name: Add gems
         working-directory: kuby_test/
         run: |
