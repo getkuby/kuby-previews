@@ -70,7 +70,7 @@ jobs:
         run: kuby-previews/scripts/install-kind.sh
 
       - name: Run Tests
-        run: kuby-previews/scripts/integration.sh
+        run: ../kuby-previews/scripts/integration.sh
         working-directory: kuby_test/
         env:
           K8S_VERSION: ${{ matrix.k8s_version }}
