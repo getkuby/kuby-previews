@@ -19,28 +19,55 @@ jobs:
         run: |
           sudo swapoff -a
           sudo rm -f /swapfile
+
       - uses: actions/checkout@v2
         with:
           path: kuby-previews/
+
+      - name: Clone kuby_test repo
+        run: git clone https://github.com/getkuby/kuby_test.git
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
+        working-directory: kuby_test/
         with:
           ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Add gems
+        working-directory: kuby_test/
+        run: |
+          bundle add kuby-previews --path vendor/kuby-previews --skip-install
+          bundle add kuby-prebundler --version '~> 0.1' --skip-install
+          bundle add kuby-kind --version '~> 0.2' --skip-install
+          bundle add activerecord-cockroachdb-adapter --version '~> 6.0' --skip-install
+
+      - name: Install added gems
+        working-directory: kuby_test/
+        run: bundle install --jobs $(nproc) --retry 3
+
       - uses: actions/setup-node@v2
+        working-directory: kuby_test/
         with:
           node-version: '16'
+          cache: yarn
+        env:
+          CXXFLAGS: --std=c++17
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install Bundler
-        run: gem install bundler
+
       - name: Install Kind
         run: kuby-previews/scripts/install-kind.sh
+
       - name: Run Tests
         run: kuby-previews/scripts/integration.sh
+        working-directory: kuby_test/
         env:
           K8S_VERSION: ${{ matrix.k8s_version }}
           PREBUNDLER_ACCESS_KEY_ID: "${{ secrets.PREBUNDLER_ACCESS_KEY_ID }}"
           PREBUNDLER_SECRET_ACCESS_KEY: "${{ secrets.PREBUNDLER_SECRET_ACCESS_KEY }}"
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
