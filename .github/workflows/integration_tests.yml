@@ -29,9 +29,9 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
-        working-directory: kuby_test/
         with:
           ruby-version: '3.0'
+          working-directory: kuby_test/
           bundler-cache: true
 
       - name: Add gems
@@ -47,10 +47,10 @@ jobs:
         run: bundle install --jobs $(nproc) --retry 3
 
       - uses: actions/setup-node@v2
-        working-directory: kuby_test/
         with:
           node-version: '16'
           cache: yarn
+          cache-dependency-path: kuby_test/yarn.lock
         env:
           CXXFLAGS: --std=c++17
 
