@@ -81,6 +81,18 @@ Kuby.define('Kubytest') do
   end
 end
 EOF
+cat <<'EOF' > config/database.yml
+default: &default
+  adapter: cockroachdb
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: localhost
+development:
+  <<: *default
+  database: kubytest_development
+production:
+  <<: *default
+  database: kubytest_production
+EOF
 cat <<'EOF' > config/routes.rb
 Rails.application.routes.draw do
   root to: 'home#index'
