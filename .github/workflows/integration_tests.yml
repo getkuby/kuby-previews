@@ -38,7 +38,9 @@ jobs:
 
       - name: Add bundler platform
         working-directory: kuby_test/
-        run: bundle lock --add-platform $(ruby -rbundler -e 'puts Bundler.local_platform.to_s')
+        run: |
+          bundle config unset deployment
+          bundle lock --add-platform $(ruby -rbundler -e 'puts Bundler.local_platform.to_s')
 
       - name: Add gems
         working-directory: kuby_test/
