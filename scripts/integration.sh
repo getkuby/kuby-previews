@@ -2,6 +2,8 @@
 
 set -e
 
+cd kuby_test/
+
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby
 cat <<EOF > kuby.rb
