@@ -89,9 +89,9 @@ default: &default
 development:
   <<: *default
   database: kubytest_development
-production:
+staging:
   <<: *default
-  database: kubytest_production
+  database: kubytest_staging
 EOF
 cat <<'EOF' > config/routes.rb
 Rails.application.routes.draw do
