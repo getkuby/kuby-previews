@@ -25,7 +25,9 @@ jobs:
           path: kuby-previews/
 
       - name: Clone kuby_test repo
-        run: git clone https://github.com/getkuby/kuby_test.git
+        run: |
+          git clone https://github.com/getkuby/kuby_test.git
+          cp -r kuby-previews/ kuby_test/vendor/
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
