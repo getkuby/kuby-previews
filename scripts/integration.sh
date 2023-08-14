@@ -80,15 +80,18 @@ touch app/views/home/index.html.erb
 # start docker registry (helps make sure pushes work)
 docker run -d -p 5000:5000 --name registry registry:2
 
+export GLI_DEBUG=true
+export KUBY_PREVIEW_NAME=foo
+
 # build and push
-GLI_DEBUG=true bundle exec kuby -e staging build \
+bundle exec kuby -e staging build \
   -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
-GLI_DEBUG=true bundle exec kuby -e staging push
+bundle exec kuby -e staging push
 
 # setup cluster
-GLI_DEBUG=true bundle exec kuby -e staging setup
-GLI_DEBUG=true bundle exec kuby -e staging setup
+bundle exec kuby -e staging setup
+bundle exec kuby -e staging setup
 
 # find kubectl executable
 kubectl=$(bundle show kubectl-rb)/vendor/kubectl
@@ -101,7 +104,7 @@ export KUBECONFIG=.kubeconfig
 ingress_ip=$($kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
 
 # deploy!
-KUBY_PREVIEW_NAME=foo GLI_DEBUG=true bundle exec kuby -e staging deploy
+bundle exec kuby -e staging deploy
 
 # attempt to hit the app
 curl -vvv http://$ingress_ip \
