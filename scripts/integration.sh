@@ -81,7 +81,7 @@ touch app/views/home/index.html.erb
 docker run -d -p 5000:5000 --name registry registry:2
 
 # build and push
-GLI_DEBUG=true bin/kuby -e staging build \
+GLI_DEBUG=true bundle exec kuby -e staging build \
   -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
 GLI_DEBUG=true bundle exec kuby -e staging push
