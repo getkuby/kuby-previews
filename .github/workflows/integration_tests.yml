@@ -59,6 +59,10 @@ jobs:
           node-version: '16'
           cache: yarn
           cache-dependency-path: kuby_test/yarn.lock
+
+      - name: Install node packages
+        working-directory: kuby_test/
+        run: yarn install
         env:
           CXXFLAGS: --std=c++17
 
