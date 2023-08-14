@@ -4,6 +4,24 @@ set -e
 
 cd kuby_test/
 
+cat <<'EOF' > .prebundle_config
+Prebundler.configure do |config|
+  config.storage_backend = Prebundler::S3Backend.new(
+    client: Aws::S3::Client.new(
+      region: 'default',
+      credentials: Aws::Credentials.new(
+        ENV['PREBUNDLER_ACCESS_KEY_ID'],
+        ENV['PREBUNDLER_SECRET_ACCESS_KEY']
+      ),
+      endpoint: 'https://us-east-1.linodeobjects.com',
+      http_continue_timeout: 0
+    ),
+    bucket: 'prebundler',
+    region: 'us-east-1'
+  )
+end
+EOF
+
 # bootstrap app for use with kuby
 bundle exec bin/rails g kuby
 cat <<EOF > kuby.rb
