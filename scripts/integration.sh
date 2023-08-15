@@ -108,6 +108,9 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
+# start docker registry (we need something that speaks the Docker API)
+docker run -d -p 5000:5000 --name registry registry:2
+
 export GLI_DEBUG=true
 
 # build and push
