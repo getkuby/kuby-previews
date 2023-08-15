@@ -108,6 +108,7 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
+bundle config unset deployment
 bundle install --jobs 3 --retry 3
 
 # start docker registry (we need something that speaks the Docker API)
