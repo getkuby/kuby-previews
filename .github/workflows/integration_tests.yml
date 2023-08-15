@@ -48,23 +48,24 @@ jobs:
           bundle add kuby-previews --path vendor/kuby-previews --skip-install
           bundle add kuby-prebundler --version '~> 0.1' --skip-install
           bundle add kuby-kind --version '~> 0.2' --skip-install
-          bundle add activerecord-cockroachdb-adapter --version '~> 6.0' --skip-install
 
       - name: Install added gems
         working-directory: kuby_test/
         run: bundle install --jobs $(nproc) --retry 3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          working-directory: kuby_test/
+          bundler-cache: true
+          cache-version: new-gems
 
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
           cache: yarn
           cache-dependency-path: kuby_test/yarn.lock
-
-      # - name: Install node packages
-      #   working-directory: kuby_test/
-      #   run: yarn install
-      #   env:
-      #     CXXFLAGS: --std=c++17
 
       - name: Install Kind
         run: kuby-previews/scripts/install-kind.sh
