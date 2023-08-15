@@ -108,6 +108,8 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
+bundle install --jobs 3 --retry 3
+
 # start docker registry (we need something that speaks the Docker API)
 docker run -d -p 5000:5000 --name registry registry:2
 
