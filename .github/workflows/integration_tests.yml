@@ -60,11 +60,11 @@ jobs:
           cache: yarn
           cache-dependency-path: kuby_test/yarn.lock
 
-      - name: Install node packages
-        working-directory: kuby_test/
-        run: yarn install
-        env:
-          CXXFLAGS: --std=c++17
+      # - name: Install node packages
+      #   working-directory: kuby_test/
+      #   run: yarn install
+      #   env:
+      #     CXXFLAGS: --std=c++17
 
       - name: Install Kind
         run: kuby-previews/scripts/install-kind.sh
