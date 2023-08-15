@@ -10,7 +10,7 @@ module Kuby
           super do
             metadata do
               # namespaces can only be max 63 characters long
-              name "#{name}-#{spec.preview_config.sanitized_name}"[0...63]
+              name "#{name}-#{spec.environment.preview_config.sanitized_name}"[0...63]
             end
           end
         end

@@ -108,17 +108,12 @@ EOF
 mkdir app/views/home/
 touch app/views/home/index.html.erb
 
-# start docker registry (helps make sure pushes work)
-docker run -d -p 5000:5000 --name registry registry:2
-
 export GLI_DEBUG=true
 
 # build and push
 bundle exec kuby -e staging build \
   -a PREBUNDLER_ACCESS_KEY_ID=${PREBUNDLER_ACCESS_KEY_ID} \
   -a PREBUNDLER_SECRET_ACCESS_KEY=${PREBUNDLER_SECRET_ACCESS_KEY}
-
-bundle exec kuby -e staging push
 
 # setup cluster
 bundle exec kuby -e staging setup
